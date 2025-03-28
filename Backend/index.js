@@ -24,10 +24,18 @@ mongoose.connect(process.env.MONGODB_URI)
 const signupdoc = require('./routes/signupdoc');
 const signuppat = require("./routes/signuppat");
 const generate = require("./routes/generatreMed");
+const doctorsroute = require("./routes/getAllDoctors");
+const loginDocRoute = require("./routes/logindoc");
+const loginPatRoute = require("./routes/loginpat");
+const appointmentsRoute = require("./routes/appointments");
 
 app.use(signupdoc);
 app.use(signuppat);
 app.use(generate);
+app.use(doctorsroute);
+app.use(loginDocRoute);
+app.use(loginPatRoute);
+app.use(appointmentsRoute);
 
 
 // Basic Route
