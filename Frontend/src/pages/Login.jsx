@@ -46,7 +46,7 @@ const LoginPage = () => {
         localStorage.setItem("email", loginData.email)
         
         console.log("Doctor Logged In ✅");
-        navigate("/doctorsHome");  // ✅ Correct way to redirect
+        navigate("/");  // ✅ Correct way to redirect
         return; // ✅ Prevents further execution
 
       } else {

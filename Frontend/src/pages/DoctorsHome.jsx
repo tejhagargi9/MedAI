@@ -1,64 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Phone, Mail, UserCircle, MoreVertical, Trash2, Edit } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Phone, Mail, UserCircle, Trash2, Edit } from 'lucide-react';
+import axios from 'axios';
 
 const PatientAppointments = () => {
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '+1 (555) 123-4567',
-      date: '2024-04-15',
-      time: '10:30 AM',
-      doctor: 'Dr. Emily Smith',
-      specialty: 'Cardiology'
-    },
-    {
-      id: 2,
-      name: 'Sarah Johnson',
-      email: 'sarah.j@example.com',
-      phone: '+1 (555) 987-6543',
-      date: '2024-04-16',
-      time: '02:45 PM',
-      doctor: 'Dr. Michael Brown',
-      specialty: 'Orthopedics'
-    },
-    {
-      id: 3,
-      name: 'Michael Lee',
-      email: 'michael.lee@example.com',
-      phone: '+1 (555) 246-8135',
-      date: '2024-04-17',
-      time: '11:15 AM',
-      doctor: 'Dr. Rachel Green',
-      specialty: 'Neurology'
-    },
-    {
-      id: 4,
-      name: 'Emma Wilson',
-      email: 'emma.wilson@example.com',
-      phone: '+1 (555) 369-2580',
-      date: '2024-04-18',
-      time: '03:30 PM',
-      doctor: 'Dr. David Johnson',
-      specialty: 'Pediatrics'
-    }
-  ]);
-
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-  const handleDeleteAppointment = (id) => {
-    setAppointments(appointments.filter(apt => apt.id !== id));
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const doctorsEmail = localStorage.getItem("email");
+        const response = await axios.get("http://localhost:3000/getAllAppointments");
+
+        console.log(response.data)
+        
+        // Filter appointments by doctor's email
+        const filteredAppointments = response.data.filter(
+          appointment => appointment.doctorEmail === doctorsEmail
+        );
+        
+        setAppointments(filteredAppointments);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch appointments");
+        setLoading(false);
+        console.error("Error fetching appointments:", err);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  const handleDeleteAppointment = async (id) => {
+    try {
+      // You might want to add an API call to delete the appointment here
+      // await axios.delete(`/deleteAppointment/${id}`);
+      
+      setAppointments(appointments.filter(apt => apt._id !== id));
+    } catch (err) {
+      console.error("Error deleting appointment:", err);
+    }
   };
 
   const renderAppointmentCard = (appointment) => {
     return (
-      <motion.div 
-        key={appointment.id}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+      <div 
+        key={appointment._id}
         className="bg-white rounded-lg shadow-md p-6 relative hover:shadow-lg transition-all duration-300"
       >
         <div className="flex justify-between items-center mb-4">
@@ -66,19 +55,13 @@ const PatientAppointments = () => {
             <UserCircle className="text-blue-500" size={40} />
             <div>
               <h3 className="text-xl font-semibold text-gray-800">{appointment.name}</h3>
-              <p className="text-gray-500 text-sm">{appointment.specialty}</p>
+              <p className="text-gray-500 text-sm">{appointment.healthIssue}</p>
             </div>
           </div>
           
           <div className="flex space-x-2">
             <button 
-              onClick={() => setSelectedAppointment(appointment)}
-              className="text-blue-500 hover:bg-blue-50 p-2 rounded-full"
-            >
-              <Edit size={20} />
-            </button>
-            <button 
-              onClick={() => handleDeleteAppointment(appointment.id)}
+              onClick={() => handleDeleteAppointment(appointment._id)}
               className="text-red-500 hover:bg-red-50 p-2 rounded-full"
             >
               <Trash2 size={20} />
@@ -95,16 +78,26 @@ const PatientAppointments = () => {
             <Phone className="text-gray-500" size={18} />
             <span className="text-gray-700">{appointment.phone}</span>
           </div>
-          <div className="flex items-center space-x-2">
-            <Calendar className="text-gray-500" size={18} />
-            <span className="text-gray-700">
-              {appointment.date} at {appointment.time}
-            </span>
-          </div>
         </div>
-      </motion.div>
+      </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-center">
+        <p className="text-xl text-gray-600">Loading appointments...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-center">
+        <p className="text-xl text-red-600">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

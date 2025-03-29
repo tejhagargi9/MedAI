@@ -28,6 +28,7 @@ const doctorsroute = require("./routes/getAllDoctors");
 const loginDocRoute = require("./routes/logindoc");
 const loginPatRoute = require("./routes/loginpat");
 const appointmentsRoute = require("./routes/appointments");
+const getAppointmentsRoute = require("./routes/getAllAppointments");
 
 app.use(signupdoc);
 app.use(signuppat);
@@ -36,6 +37,7 @@ app.use(doctorsroute);
 app.use(loginDocRoute);
 app.use(loginPatRoute);
 app.use(appointmentsRoute);
+app.use(getAppointmentsRoute);
 
 
 // Basic Route

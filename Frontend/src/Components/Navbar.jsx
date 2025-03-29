@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // Remove login status from localStorage
-    localStorage.removeItem('isLogin');
+    localStorage.clear();
     // Update login state
 
     setIsLoggedIn(false);

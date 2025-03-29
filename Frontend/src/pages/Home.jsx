@@ -13,6 +13,7 @@ import {
   Stethoscope as MedicalStethoscope,
   UserPlus,
   LogIn,
+  Calendar,
 } from "lucide-react";
 
 const MedAIHomepage = () => {
@@ -21,12 +22,15 @@ const MedAIHomepage = () => {
   const [aiResponse, setAiResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasEmail, setHasEmail] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check localStorage for login status on component mount
+    // Check localStorage for login status and email on component mount
     const loginStatus = localStorage.getItem('isLogin');
+    const email = localStorage.getItem('email');
     setIsLoggedIn(loginStatus === 'true');
+    setHasEmail(!!email); // Set to true if email exists in localStorage
   }, []);
 
   const featureVariants = {
@@ -249,60 +253,75 @@ const MedAIHomepage = () => {
             recommendations with our advanced AI technology.
           </motion.p>
 
-          {/* Conditional Rendering based on Login Status */}
+          {/* Conditional Rendering based on Email in localStorage */}
           <motion.div
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.4 }}
             className="max-w-3xl mx-auto space-y-4"
           >
-            {!isLoggedIn ? (
-              <motion.button
-                onClick={handleGetStarted}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition flex items-center justify-center space-x-2"
-              >
-                <LogIn size={24} />
-                <span>Get Started</span>
-              </motion.button>
+            {hasEmail ? (
+              // Show only See Appointments button when email exists in localStorage
+              <Link to="/doctorsHome">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition flex items-center justify-center space-x-2"
+                >
+                  <Calendar size={24} />
+                  <span>See Appointments</span>
+                </motion.button>
+              </Link>
             ) : (
-              <>
-                <form onSubmit={handleSubmit} className="relative mb-4">
-                  <input
-                    type="text"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe your medical symptoms or concern..."
-                    className="w-full p-4 pl-12 pr-4 text-lg border-2 border-blue-200 rounded-full focus:outline-none focus:border-blue-500 transition"
-                  />
-                  <Search
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
-                    size={24}
-                  />
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={`absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition ${
-                      isLoading ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    {isLoading ? "Analyzing..." : "Analyze"}
-                  </button>
-                </form>
+              // Show original UI when no email in localStorage
+              !isLoggedIn ? (
+                <motion.button
+                  onClick={handleGetStarted}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition flex items-center justify-center space-x-2"
+                >
+                  <LogIn size={24} />
+                  <span>Get Started</span>
+                </motion.button>
+              ) : (
+                <>
+                  <form onSubmit={handleSubmit} className="relative mb-4">
+                    <input
+                      type="text"
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder="Describe your medical symptoms or concern..."
+                      className="w-full p-4 pl-12 pr-4 text-lg border-2 border-blue-200 rounded-full focus:outline-none focus:border-blue-500 transition"
+                    />
+                    <Search
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                      size={24}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className={`absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition ${
+                        isLoading ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {isLoading ? "Analyzing..." : "Analyze"}
+                    </button>
+                  </form>
 
-                {/* Consult Specialist Doctors Button */}
-                <Link to="/consultDoctor">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition flex items-center justify-center space-x-2"
-                  >
-                    <UserPlus size={24} />
-                    <span>Consult Specialist Doctors</span>
-                  </motion.button>
-                </Link>
-              </>
+                  {/* Consult Specialist Doctors Button */}
+                  <Link to="/consultDoctor">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition flex items-center justify-center space-x-2"
+                    >
+                      <UserPlus size={24} />
+                      <span>Consult Specialist Doctors</span>
+                    </motion.button>
+                  </Link>
+                </>
+              )
             )}
           </motion.div>
         </div>
