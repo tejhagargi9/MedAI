@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import axios from "axios"; // Make sure to import axios
+import axios from "axios";
 import { motion } from "framer-motion";
 import { User, Stethoscope, Mail, Lock, LogIn } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
-import { ToastContainer, toast } from "react-toastify"; // Import toast
-import 'react-toastify/dist/ReactToastify.css'; // Import toast CSS
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify"; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const LoginPage = () => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [userType, setUserType] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
