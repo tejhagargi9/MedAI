@@ -20,6 +20,8 @@ const Navbar = () => {
     setIsLoggedIn(false);
     // Redirect to home page
     navigate('/');
+    location.reload();
+    
   };
 
   return (

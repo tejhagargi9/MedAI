@@ -46,7 +46,10 @@ const LoginPage = () => {
         localStorage.setItem("email", loginData.email)
         
         console.log("Doctor Logged In ✅");
-        navigate("/");  // ✅ Correct way to redirect
+
+        navigate("/");  // ✅ Correct way to 
+        location.reload(); // ✅ Reloads the page to reflect the new state
+        
         return; // ✅ Prevents further execution
 
       } else {
@@ -59,6 +62,8 @@ const LoginPage = () => {
 
         console.log("Patient Logged In ✅");
         navigate("/"); // ✅ Redirect patient to homepage
+        location.reload(); // ✅ Reloads the page to reflect the new state
+
         return; // ✅ Prevents further execution
       }
   

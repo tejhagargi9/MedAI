@@ -34,11 +34,9 @@ const PatientAppointments = () => {
   }, []);
 
   const handleDeleteAppointment = async (id) => {
-    try {
-      // You might want to add an API call to delete the appointment here
-      // await axios.delete(`/deleteAppointment/${id}`);
-      
-      setAppointments(appointments.filter(apt => apt._id !== id));
+      try {
+      await axios.delete(`http://localhost:3000/deleteAppointment/${id}`);
+      setAppointments(prev => prev.filter(apt => apt._id !== id));
     } catch (err) {
       console.error("Error deleting appointment:", err);
     }

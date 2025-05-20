@@ -29,6 +29,7 @@ const loginDocRoute = require("./routes/logindoc");
 const loginPatRoute = require("./routes/loginpat");
 const appointmentsRoute = require("./routes/appointments");
 const getAppointmentsRoute = require("./routes/getAllAppointments");
+const deleteAppointments = require("./routes/deleteAppointments");
 
 app.use(signupdoc);
 app.use(signuppat);
@@ -38,6 +39,7 @@ app.use(loginDocRoute);
 app.use(loginPatRoute);
 app.use(appointmentsRoute);
 app.use(getAppointmentsRoute);
+app.use(deleteAppointments);
 
 
 // Basic Route

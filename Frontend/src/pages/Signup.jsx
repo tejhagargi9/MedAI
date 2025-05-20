@@ -60,6 +60,8 @@ const SignupPage = () => {
         localStorage.setItem("isLogin", true)
         localStorage.setItem("email", formData.email)
         navigate("/doctorsHome")
+        location.reload()
+
       } else {
         console.log(formData.name, formData.email, formData.password);
 
@@ -70,8 +72,7 @@ const SignupPage = () => {
         });
         localStorage.setItem("isLogin", true)
         navigate("/")
-
-
+        location.reload()
       }
 
       // Handle successful signup
